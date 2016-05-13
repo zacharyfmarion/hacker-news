@@ -90,6 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-tab on-click = "newStories">New</paper-tab>
       <paper-tab on-click = "showHN">Show</paper-tab>
       <paper-tab on-click = "askHN">Ask</paper-tab>
+      <paper-tab on-click = "jobStories">Jobs</paper-tab>
     </paper-tabs>
 
     <hacker-news id = "hn"></hacker-news>
@@ -116,6 +117,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     $scope.askHN = function(){
       hn.askHN();
+    }
+
+    $scope.jobStories = function(){
+      hn.jobStories();
     }
 
   </script>
