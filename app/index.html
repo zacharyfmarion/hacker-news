@@ -64,6 +64,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     hacker-news{
       border-radius: 5px;
     }
+    /* Fix the toolbar height */
+    #main-toolbar{
+      height: 110px;
+    }
     paper-tabs{
       background-color: var(--dark-primary-color);
       color: #fff;
@@ -82,27 +86,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <paper-toolbar>
-      <paper-icon-button icon="menu" on-tap=""></paper-icon-button>
-      <div class="title">Hacker News</div>
-      <paper-icon-button icon="info" on-click="showAbout"></paper-icon-button>
-      <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
-      <paper-icon-button icon="more-vert" on-click=""></paper-icon-button>
-    </paper-toolbar>
-    <!-- $scope.selected changes based on which tab is clicked -->
-    <paper-tabs selected="{{selected}}" attr-for-selected="name">
-      <paper-tab name = "topStories" on-click = "topStories">Top</paper-tab>
-      <paper-tab name = "newStories" on-click = "newStories">New</paper-tab>
-      <paper-tab name = "showHN"     on-click = "showHN">Show</paper-tab>
-      <paper-tab name = "askHN"      on-click = "askHN">Ask</paper-tab>
-      <paper-tab name = "jobStories" on-click = "jobStories">Jobs</paper-tab>
-    </paper-tabs>
+    <paper-scroll-header-panel class="flex" fixed>
+      <!-- Main toolbar -->
+      <paper-toolbar class = "medium-tall" id = "main-toolbar">
 
-    <!-- Stories list -->
-    <hacker-news id = "hn"></hacker-news>
+        <paper-icon-button icon="menu" on-tap=""></paper-icon-button>
+        <div class="title">Hacker News</div>
+        <paper-icon-button icon="info"      on-click="showAbout"></paper-icon-button>
+        <paper-icon-button icon="refresh"   on-click="refresh"></paper-icon-button>
+        <paper-icon-button icon="more-vert" on-click=""></paper-icon-button>
 
-    <!-- HIDDEN UI ELEMENTS -->
-    <about-dialog id = "about"></about-dialog>
+        <!-- Tabs bar -->
+        <paper-tabs class = "bottom fit" selected="{{selected}}" attr-for-selected="name">
+          <paper-tab name = "topStories" on-click = "topStories">Top</paper-tab>
+          <paper-tab name = "newStories" on-click = "newStories">New</paper-tab>
+          <paper-tab name = "showHN"     on-click = "showHN">Show</paper-tab>
+          <paper-tab name = "askHN"      on-click = "askHN">Ask</paper-tab>
+          <paper-tab name = "jobStories" on-click = "jobStories">Jobs</paper-tab>
+        </paper-tabs>
+
+      </paper-toolbar>
+
+      <!-- Stories list -->
+      <hacker-news id = "hn"></hacker-news>
+
+      <!-- HIDDEN UI ELEMENTS -->
+      <about-dialog id = "about"></about-dialog>
+
+     </paper-scroll-header-panel>
+
+
+
+
 
   <script>
     var $scope = document.querySelector("#app");
