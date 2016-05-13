@@ -68,9 +68,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     #main-toolbar{
       height: 110px;
     }
+    #account-info{
+      height: 110px;
+      margin: 0;
+      background: var(--default-primary-color);
+    }
+    #side-panel{
+      width: 250px;
+    }
     paper-tabs{
       background-color: var(--dark-primary-color);
       color: #fff;
+    }
+    paper-icon-item{
+      cursor: pointer;
     }
     /deep/ a{
       text-decoration: none;
@@ -86,37 +97,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <paper-scroll-header-panel class="flex" fixed>
-      <!-- Main toolbar -->
-      <paper-toolbar class = "medium-tall" id = "main-toolbar">
+    <paper-drawer-panel force-narrow>
+      <!-- Sidebar -->
+      <paper-header-panel id = "side-panel" drawer>
+        <div id = "account-info">
+          <!-- Fill in with basic accont info (name, karma, etc)  -->
+        </div>
+        <paper-menu>
+          <paper-icon-item>
+            <iron-icon icon="icons:book" item-icon></iron-icon>
+            View Hacker News
+          </paper-icon-item>
+          <paper-icon-item>
+            <iron-icon icon="editor:mode-edit" item-icon></iron-icon>
+            Post
+          </paper-icon-item>
+          <paper-icon-item>
+            <iron-icon icon="icons:settings" item-icon></iron-icon>
+            Settings
+          </paper-icon-item>
+        </paper-menu>
+      </paper-header-panel>
+      <!-- Main app -->
+      <paper-scroll-header-panel class="flex" fixed main>
+        <!-- Main toolbar -->
+        <paper-toolbar class = "medium-tall" id = "main-toolbar">
 
-        <paper-icon-button icon="menu" on-tap=""></paper-icon-button>
-        <div class="title">Hacker News</div>
-        <paper-icon-button icon="info"      on-click="showAbout"></paper-icon-button>
-        <paper-icon-button icon="refresh"   on-click="refresh"></paper-icon-button>
-        <paper-icon-button icon="more-vert" on-click=""></paper-icon-button>
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="title">Hacker News</div>
+          <paper-icon-button icon="info"      on-click="showAbout"></paper-icon-button>
+          <paper-icon-button icon="refresh"   on-click="refresh"></paper-icon-button>
+          <paper-icon-button icon="more-vert" on-click=""></paper-icon-button>
 
-        <!-- Tabs bar -->
-        <paper-tabs class = "bottom fit" selected="{{selected}}" attr-for-selected="name">
-          <paper-tab name = "topStories" on-click = "topStories">Top</paper-tab>
-          <paper-tab name = "newStories" on-click = "newStories">New</paper-tab>
-          <paper-tab name = "showHN"     on-click = "showHN">Show</paper-tab>
-          <paper-tab name = "askHN"      on-click = "askHN">Ask</paper-tab>
-          <paper-tab name = "jobStories" on-click = "jobStories">Jobs</paper-tab>
-        </paper-tabs>
+          <!-- Tabs bar -->
+          <paper-tabs class = "bottom fit" selected="{{selected}}" attr-for-selected="name">
+            <paper-tab name = "topStories" on-click = "topStories">Top</paper-tab>
+            <paper-tab name = "newStories" on-click = "newStories">New</paper-tab>
+            <paper-tab name = "showHN"     on-click = "showHN">Show</paper-tab>
+            <paper-tab name = "askHN"      on-click = "askHN">Ask</paper-tab>
+            <paper-tab name = "jobStories" on-click = "jobStories">Jobs</paper-tab>
+          </paper-tabs>
 
-      </paper-toolbar>
+        </paper-toolbar>
 
-      <!-- Stories list -->
-      <hacker-news id = "hn"></hacker-news>
+        <!-- Stories list -->
+        <hacker-news id = "hn"></hacker-news>
 
-      <!-- HIDDEN UI ELEMENTS -->
-      <about-dialog id = "about"></about-dialog>
+        <!-- HIDDEN UI ELEMENTS -->
+        <about-dialog id = "about"></about-dialog>
 
-     </paper-scroll-header-panel>
-
-
-
+       </paper-scroll-header-panel>
+    </paper-drawer-panel>
 
 
   <script>
