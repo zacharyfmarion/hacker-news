@@ -30,3 +30,8 @@ gulp
 ```
 
 Which will create a `dist` with all of the elements vulcanized and the scripts / css minified for production.
+
+### Todo
+- [ ] Functionality for toolbar buttons (refresh, menu)
+- [ ] Ability to view comments
+- [ ] Ability to sign in
