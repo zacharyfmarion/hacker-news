@@ -1,0 +1,143 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<dom-module id="hacker-news">
+  <template>
+    <!-- Flexbox styles -->
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+      }
+
+      .container{
+        margin: 20px auto;
+        max-width: 700px;
+      }
+    </style>
+
+    <div class="container layout vertical">
+      <!-- Articles go here -->
+      <paper-material elevation = "1">
+        <paper-menu>
+          <!-- Iterate over top stories -->
+          <template is="dom-repeat" items="[[stories]]" as="story">
+            <news-story
+              title    = "[[story.title]]"
+              url      = "[[story.url]]"
+              author   = "[[story.by]]"
+              points   = "[[story.score]]"
+              comments = "[[story.descendants]]"
+              date     = "[[story.time]]"
+            ></news-story>
+          </template>
+        </paper-menu>
+      </paper-material>
+    </div>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'hacker-news',
+
+      properties: {
+
+        hn: {
+          type: Object,
+          value: function(){
+            return new Firebase('https://hacker-news.firebaseio.com/v0');
+          }
+        },
+
+        /* Newest item in the db */
+        max_item: {
+          type: Object
+        },
+
+        /* Top stories from hacker news */
+        stories: {
+          type: Array,
+          value: function(){
+            return [];
+          },
+          observer: '_storiesChanged'
+        },
+
+        /* Limit the number of articles we see */
+        num_articles: {
+          type: String,
+          notify: true,
+          value: 10
+        }
+      },
+
+      /* Function to call when the element is ready */
+      ready: function(){
+        // get the top stories as default
+        this.max_item = this.hn.child('maxitem');
+        this.topStories();
+      },
+
+      /** Get the top stories from HN */
+      topStories: function(){
+        var top_stories = this.hn.child('topstories');
+        this._getStories(top_stories);
+      },
+
+      /** Get the newest stories from HN */
+      newStories: function(){
+        var new_stories = this.hn.child('newstories');
+        this._getStories(new_stories);
+      },
+
+      /** Get the top show HN posts*/
+      showHN: function(){
+        var show_stories = this.hn.child('showstories');
+        this._getStories(show_stories);
+      },
+
+      /** Get the top show HN questions*/
+      askHN: function(){
+        var ask_stories = this.hn.child('askstories');
+        this._getStories(ask_stories);
+      },
+
+      /* Private functions */
+
+      /** Watch for change in the stories array */
+      _storiesChanged: function(){
+        console.dir(this.stories);
+      },
+
+      /**
+        * Push the first num_articles articles to this.stories
+        * @param {Ref} A firebase reference to the content url
+        * Can be the top stories, newest stories, showHN, Ask HN...
+        */
+      _getStories: function(content_ref){
+        var _this = this;
+        this.stories = []; // reset the stories array (might have to use this.slice())
+        content_ref.limitToFirst(this.num_articles).once("value", function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+            _this.hn.child(`item/${childSnapshot.val()}`).once('value', function(childSnapshot){
+              _this.push('stories', childSnapshot.val());
+            });
+          });
+        })
+      }
+
+    });
+  })();
+  </script>
+</dom-module>
