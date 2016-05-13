@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background: var(--app-background-color);
     }
     paper-toolbar{
-      background: var(--default-primary-color)
+      background: var(--default-primary-color);
     }
     hacker-news{
       border-radius: 5px;
@@ -72,6 +72,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       text-decoration: none;
       color: var(--default-primary-color);
     }
+    /deep/ paper-button{
+      color: var(--default-primary-color);
+    }
   </style>
 </head>
 
@@ -82,25 +85,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-toolbar>
       <paper-icon-button icon="menu" on-tap=""></paper-icon-button>
       <div class="title">Hacker News</div>
+      <paper-icon-button icon="info" on-click="showAbout"></paper-icon-button>
       <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
       <paper-icon-button icon="more-vert" on-click=""></paper-icon-button>
     </paper-toolbar>
-    <paper-tabs selected="0">
-      <paper-tab on-click = "topStories">Top</paper-tab>
-      <paper-tab on-click = "newStories">New</paper-tab>
-      <paper-tab on-click = "showHN">Show</paper-tab>
-      <paper-tab on-click = "askHN">Ask</paper-tab>
-      <paper-tab on-click = "jobStories">Jobs</paper-tab>
+    <!-- $scope.selected changes based on which tab is clicked -->
+    <paper-tabs selected="{{selected}}" attr-for-selected="name">
+      <paper-tab name = "topStories" on-click = "topStories">Top</paper-tab>
+      <paper-tab name = "newStories" on-click = "newStories">New</paper-tab>
+      <paper-tab name = "showHN"     on-click = "showHN">Show</paper-tab>
+      <paper-tab name = "askHN"      on-click = "askHN">Ask</paper-tab>
+      <paper-tab name = "jobStories" on-click = "jobStories">Jobs</paper-tab>
     </paper-tabs>
 
+    <!-- Stories list -->
     <hacker-news id = "hn"></hacker-news>
+
+    <!-- HIDDEN UI ELEMENTS -->
+    <about-dialog id = "about"></about-dialog>
 
   <script>
     var $scope = document.querySelector("#app");
     var hn = document.querySelector("#hn");
 
+    // set the selected index
+    $scope.selected = "topStories";
+
+    window.addEventListener('resize', function(e){
+      hn.style.height = e.target.innerHeight - 100 + 'px';
+    })
+
     $scope.refresh = function(){
-      // console.log("refeshed");
+      window['$scope'][$scope.selected]();
+    }
+
+    $scope.showAbout = function(){
+      $scope.$.about.open();
     }
 
     $scope.topStories = function(){
